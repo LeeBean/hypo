@@ -1,7 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/paper-button">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/google-chart/google-chart.html">
 
 <dom-module id="hypo-app">
   <template>
@@ -17,7 +18,12 @@
       }
 
       .green {
-        background:white;
+        background:green;
+      }
+
+      google-chart {
+        height: 300px;
+        width: 50em;
       }
 
     </style>
@@ -31,15 +37,20 @@
     <template is="dom-if" if="[[_equal(route.path, 'person')]]">
       <p>ok</p>
     </template>
+    <paper-button on-click="_showChart" class="custom green">toggles</paper-button>
     <template is="dom-if" if="[[chart1]]">
-      <p>Diagram</p>
+      <google-chart
+        type='pie'
+        options='{"title": "Distribution of days in 2001Q1"}'
+        cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'
+        rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
+      </google-chart>
     </template>
     <h2>Hello w [[prop1]]</h2>
     <div class="main-container">
-      <form is="iron-form">
-          <paper-button on-click="_showChart" class="custom green">toggles</paper-button>
-      </form>
+
     </div>
+
   </template>
 
   <script>
