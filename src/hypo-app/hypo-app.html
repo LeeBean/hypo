@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/paper-button">
+
+<dom-module id="hypo-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .main-container {
+        width:200px;
+        height:200px;
+        background:grey;
+      }
+
+      .green {
+        background:white;
+      }
+
+    </style>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+            route="{{route}}"
+            pattern=":section"
+            data="{{sectionData}}"
+    </app-route>
+    <template is="dom-if" if="[[_equal(route.path, 'person')]]">
+      <p>ok</p>
+    </template>
+    <template is="dom-if" if="[[chart1]]">
+      <p>Diagram</p>
+    </template>
+    <h2>Hello w [[prop1]]</h2>
+    <div class="main-container">
+      <form is="iron-form">
+          <paper-button on-click="_showChart" class="custom green">toggles</paper-button>
+      </form>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'hypo-app',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'hypo-app',
+          sectionData: Object,
+          subRoute: Object
+        },
+        chart1: {
+          type: Boolean,
+          value: false
+        }
+      },
+      _equal: function(a, b) {
+          return a === b;
+      },
+      _computeSelectedTab: function(sections, section) {
+          return sections.indexOf(section);
+      },
+      _showChart: function() {
+        this.set('chart1', this.chart1 != true);
+      }
+    });
+  </script>
+</dom-module>
