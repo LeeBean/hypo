@@ -1,2 +1,4 @@
 bower_components/*
+.idea/*
+.idea/uiDesigner.xml
 !bower_components/.keep
