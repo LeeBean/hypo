@@ -1,20 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="line-chart.html">
+<link rel="import" href="token-area.html">
+<link rel="import" href="x-key-aware.html">
+<link rel="import" href="../../bower_components/d3/d3.js">
 
 <dom-module id="hypo-app">
   <template>
     <style>
       :host {
         display: block;
-      }
-
-      .main-container {
-        width:200px;
-        height:200px;
-        background:grey;
+        height:100%;
+          background:red;
       }
 
       .green {
@@ -34,51 +33,52 @@
             pattern=":section"
             data="{{sectionData}}"
     </app-route>
-    <template is="dom-if" if="[[_equal(route.path, 'person')]]">
-      <p>ok</p>
-    </template>
-    <paper-button on-click="_showChart" class="custom green">toggles</paper-button>
-    <template is="dom-if" if="[[chart1]]">
-      <google-chart
-        type='pie'
-        options='{"title": "Distribution of days in 2001Q1"}'
-        cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'
-        rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
-      </google-chart>
-    </template>
-    <h2>Hello w [[prop1]]</h2>
-    <div class="main-container">
 
+    <div style="height: 100%;width:100%">
+        <template is="dom-if" if="[[_equal(route.path, 'person')]]">
+          <p>ok</p>
+        </template>
+        <template is="dom-if" if="[[chart1]]">
+
+        </template>
+
+        <!--<x-key-aware></x-key-aware>-->
+
+        <!--<paper-button on-click="_showChart" class="custom green">toggles</paper-button>-->
+
+        <line-chart id="lineChart"></line-chart>
+        <token-area></token-area>
     </div>
-
   </template>
 
   <script>
     Polymer({
-
-      is: 'hypo-app',
-
-      properties: {
-        prop1: {
-          type: String,
-          value: 'hypo-app',
-          sectionData: Object,
-          subRoute: Object
+        is: 'hypo-app',
+        ready: function () {
+          this.addEventListener('token1Event', this._token1Action);
+          this.addEventListener('token2Event', this._token2Action);
         },
-        chart1: {
-          type: Boolean,
-          value: false
-        }
-      },
-      _equal: function(a, b) {
+        _equal: function(a, b) {
           return a === b;
-      },
-      _computeSelectedTab: function(sections, section) {
+        },
+        _computeSelectedTab: function(sections, section) {
           return sections.indexOf(section);
-      },
-      _showChart: function() {
-        this.set('chart1', this.chart1 != true);
-      }
+        },
+        _showChart: function() {
+        // this.set('chart1', this.chart1 != true);
+        var googleChart = this.$.test;
+        console.log(googleChart);
+        },
+        _token1Action: function () {
+            console.log("ok");
+            var lineChart = this.$.lineChart;
+            lineChart.initChartOne();
+        },
+        _token2Action: function () {
+            console.log("_token2Action");
+            var lineChart = this.$.lineChart;
+            lineChart.initChartTwo();
+        }
     });
   </script>
 </dom-module>

@@ -1,0 +1,199 @@
+<link rel="import" href="../../bower_components/d3/d3.min.js">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<dom-module id="line-chart">
+    <template>
+        <style>
+            :host {
+                display: block;
+                height: 500px;
+            }
+
+            .content-container > ::content .area {
+                fill: steelblue;
+            }
+
+            .content-container > ::content text {
+                font-family: Lato;
+                font-size: 13px;
+            }
+
+            .content-container > ::content .grid line {
+                stroke: white;
+                stroke-opacity: 0.7;
+                shape-rendering: crispEdges;
+                stroke-width: 1px;
+            }
+
+            .content-container > ::content .grid path {
+                stroke-width: 0;
+            }
+
+            .content-container > ::content path,
+            .content-container > ::content line {
+                fill: none;
+                stroke: white;
+                shape-rendering: crispEdges;
+                stroke-width: 5px;
+            }
+
+            .content-container > ::content .line {
+                stroke-width: 4px;
+            }
+
+            .content-container > ::content .line-chart svg {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+
+        <div class="content-container">
+            <div id="chart"></div>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'line-chart',
+            properties: {
+                prop1: {
+                    type: String,
+                    value: 'hypo-app',
+                    sectionData: Object,
+                    subRoute: Object
+                },
+                color: {
+                    color: Array
+                },
+                arc: Object,
+                pie: Object,
+                svg: Object,
+                data:Object,
+                url: Object,
+                g: Object
+            },
+            ready: function () {
+                this._initLineChart("/src/hypo-app/dataLineChart.csv");
+            },
+            _initLineChart: function (dataUrl) {
+                // set the dimensions and margins of the graph
+                var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                        width = 960 - margin.left - margin.right,
+                        height = 500 - margin.top - margin.bottom;
+
+                // parse the date / time
+                var parseTime = d3.timeParse("%m-%y");
+
+                // set the ranges
+                var x = d3.scaleTime().range([0, width]);
+                var y = d3.scaleLinear().range([height, 0]);
+
+                // define the 1st line
+                var valueline = d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.close); });
+
+                //  define the 2nd line
+                var valueline2 = d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.open); });
+
+
+                // gridlines in x axis function
+                function make_x_gridlines() {
+                    return d3.axisBottom(x)
+                            .ticks(5)
+                }
+
+                // gridlines in y axis function
+                function make_y_gridlines() {
+                    return d3.axisLeft(y)
+                            .ticks(5)
+                }
+
+                // append the svg obgect to the body of the page
+                // appends a 'group' element to 'svg'
+                // moves the 'group' element to the top left margin
+                var svg = d3.select(this.$.chart).append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+                // Get the data
+                d3.csv(dataUrl, function(error, data) {
+                    if (error) throw error;
+
+                    // format the data
+                    data.forEach(function(d) {
+                        d.date = parseTime(d.date);
+                        d.close = +d.close;
+                        d.open = +d.open;
+                    });
+
+                    // Scale the range of the data
+                    x.domain(d3.extent(data, function(d) { return d.date; }));
+                    y.domain([0, d3.max(data, function(d) {
+                        return Math.max(d.close, d.open); })]);
+
+                    // add the X gridlines
+                    svg.append("g")
+                            .attr("class", "grid")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(make_x_gridlines()
+                                    .tickSize(-height)
+                                    .tickFormat("")
+                    )
+
+                    // add the Y gridlines
+                    svg.append("g")
+                            .attr("class", "grid")
+                            .call(make_y_gridlines()
+                                    .tickSize(-width)
+                                    .tickFormat("")
+                    )
+
+                    // Add the valueline path.
+//                    svg.append("path")
+//                            .data([data])
+//                            .attr("class", "line")
+//                            .attr("d", valueline);
+
+                    // Add the valueline2 path.
+                    svg.append("path")
+                            .data([data])
+                            .attr("class", "line")
+                            .style("stroke", "blue")
+                            .attr("d", valueline2);
+
+                    // Add the X Axis
+
+                    var xAxis = d3.axisBottom(x).ticks(6);
+                    svg.append("g")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis);
+
+                    // Add the Y Axis
+
+                    var yAxis = d3.axisLeft(y).ticks(2);
+
+                    svg.append("g")
+                            .call(yAxis);
+
+                });
+            },
+            initChartOne: function () {
+                this.$.chart.innerHTML = "";
+                this._initLineChart("/src/hypo-app/dataLineChart.csv");
+            },
+            initChartTwo: function () {
+                this.$.chart.innerHTML = "";
+                this._initLineChart("/src/hypo-app/dataLineChart2.csv");
+            }
+        });
+    </script>
+</dom-module>
