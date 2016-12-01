@@ -10,8 +10,14 @@
                 height: 500px;
             }
 
-            .content-container > ::content .area {
+            .content-container > ::content .token1 {
                 fill: steelblue;
+                stroke: steelblue;
+            }
+
+            .content-container > ::content .token2 {
+                fill: brown;
+                stroke: brown;
             }
 
             .content-container > ::content text {
@@ -38,8 +44,9 @@
                 stroke-width: 5px;
             }
 
-            .content-container > ::content .line {
-                stroke-width: 4px;
+            .content-container > ::content .line2 {
+                stroke-width: 3px;
+                stroke:red;
             }
 
             .content-container > ::content .line-chart svg {
@@ -91,10 +98,6 @@
                 var x = d3.scaleTime().range([0, width]);
                 var y = d3.scaleLinear().range([height, 0]);
 
-                // define the 1st line
-                var valueline = d3.line()
-                        .x(function(d) { return x(d.date); })
-                        .y(function(d) { return y(d.close); });
 
                 //  define the 2nd line
                 var valueline2 = d3.line()
@@ -124,6 +127,7 @@
                         .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
+                var self = this;
                 // Get the data
                 d3.csv(dataUrl, function(error, data) {
                     if (error) throw error;
@@ -133,6 +137,7 @@
                         d.date = parseTime(d.date);
                         d.close = +d.close;
                         d.open = +d.open;
+                        d.token2 = +d.token2;
                     });
 
                     // Scale the range of the data
@@ -157,21 +162,27 @@
                                     .tickFormat("")
                     )
 
-                    // Add the valueline path.
-//                    svg.append("path")
-//                            .data([data])
-//                            .attr("class", "line")
-//                            .attr("d", valueline);
+                    // add the token1
+                    svg.append("path")
+                    .data([data])
+                    .attr("class", "token1")
+                    .attr("d", self._getToken1Area(x,y,height));
 
-                    // Add the valueline2 path.
+                    // add the token2
                     svg.append("path")
                             .data([data])
-                            .attr("class", "line")
-                            .style("stroke", "blue")
-                            .attr("d", valueline2);
+                            .attr("class", "token2")
+                            .attr("d", self._getToken2Area(x,y,height));
+
+
+                    // Add the valueline path.
+                    svg.append("path")
+                            .data([data])
+                            .attr("class", "line2")
+                            .attr("d", self._getBaseRate(x,y));
+
 
                     // Add the X Axis
-
                     var xAxis = d3.axisBottom(x).ticks(6);
                     svg.append("g")
                             .attr("transform", "translate(0," + height + ")")
@@ -193,6 +204,26 @@
             initChartTwo: function () {
                 this.$.chart.innerHTML = "";
                 this._initLineChart("/src/hypo-app/dataLineChart2.csv");
+            },
+            _getBaseRate: function (x,y) {
+                // define the 1st line
+                return d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.close); });
+            },
+            _getToken1Area: function (x,y,height) {
+                // define the area
+                return d3.area()
+                        .x(function(d) { return x(d.date); })
+                        .y0(height)
+                        .y1(function(d) { return y(d.open); });
+            },
+            _getToken2Area: function (x,y,height) {
+                // define the area
+                return d3.area()
+                        .x(function(d) { return x(d.date); })
+                        .y0(height)
+                        .y1(function(d) { return y(d.token2); });
             }
         });
     </script>
