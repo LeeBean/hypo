@@ -1,45 +1,49 @@
 # \<hypo\>
 
+## Hypo
+It's a web application which is optimized for a beamer to explain mortgages.
+(based on Polymer-starter-kit)
 
-## Install nodejs
+![alt tag](hypo.gif)
+
+Technologies:
+ - Polymer 1.4
+ - Polymer-CLI
+ - Nodejs
+ - Gulp
+ - Jquery
+ - d3.js
+ - Sass
+
+## Installation
+
+Install nodejs
 
 ```
-https://nodejs.org/en/
+1) https://nodejs.org/en/
+2) npm install
 ```
 
-## Install the Polymer-CLI
+Install the Polymer-CLI and Bower
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and [Bower](npm install -g bower) installed.
-Then run `polymer serve` to serve your application locally.
+```
+1) https://www.npmjs.com/package/polymer-cli
+2) npm install -g polymer-cli
+```
+```
+1) npm install -g bower
+2) bower install
+```
 
 
 ## Viewing Your Application
 
 ```
-$ polymer serve
+$ npm run dev
 ```
 
 ## Building Your Application
 
 ```
-$ polymer build
+$ npm run build
 ```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
