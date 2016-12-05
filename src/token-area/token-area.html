@@ -1,0 +1,89 @@
+<link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../utilities/imports.html">
+<link rel="import" href="token-area-styles.html">
+
+<dom-module id="token-area">
+    <template>
+        <style include="token-area-styles"></style>
+
+        <div class="content-container">
+            <div class="container">
+                <div id="token1" class="token">
+
+                </div>
+                <div id="token2" class="token">
+
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'token-area',
+            behaviors: [
+                Polymer.IronA11yKeysBehavior
+            ],
+            properties: {
+                keyEventTarget: {
+                    type: Object,
+                    value: function() {
+                        return document.body;
+                    }
+                },
+                showToken1: Boolean,
+                showToken2: Boolean
+            },
+            keyBindings: {
+                '* pageup pagedown left right down up home end space enter @ ~ " $ ? ! \\ + : # backspace': '_updatePressed',
+                'q': '_token1Action',
+                'w': '_token2Action',
+                'e': '_token3Action',
+                'r': '_token4Action',
+                't': '_token5Action',
+                's': '_token6Action',
+                'shift+tab shift+space': '_updatePressed'
+            },
+            _updatePressed: function(event) {
+                console.log(event.detail);
+            },
+            _token1Action: function () {
+                this.set('showToken1', this.showToken1 != true);
+                if(this.showToken1) {
+                    $(this.$.token1).css( "border", "20px solid green");
+                } else {
+                    $(this.$.token1).css( "border", "5px solid #5AA7FF");
+                }
+                this.fire('tokenEvent','token1');
+            },
+            _token2Action: function () {
+                this.set('showToken2', this.showToken2 != true);
+                if(this.showToken2) {
+                    $(this.$.token2).css( "border", "20px solid red");
+                } else {
+                    $(this.$.token2).css( "border", "5px solid #5AA7FF");
+                }
+                this.fire('tokenEvent','token2');
+            },
+            _token3Action: function () {
+                this.set('showToken3', this.showToken3 != true);
+                if(this.showToken3) {
+                    $(this.$.token2).css( "border", "20px solid grey");
+                } else {
+                    $(this.$.token2).css( "border", "5px solid #5AA7FF");
+                }
+                this.fire('tokenEvent','token3');
+            },
+            _token4Action: function () {
+                this.fire('tokenEvent','token4');
+            },
+            _token5Action: function () {
+                this.fire('tokenEvent','token5');
+            },
+            _token6Action: function () {
+                this.fire('tokenEvent','token6');
+            }
+        });
+    </script>
+</dom-module>

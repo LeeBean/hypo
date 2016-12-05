@@ -1,0 +1,183 @@
+<link rel="import" href="../utilities/imports.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="line-chart-styles.html">
+
+<dom-module id="line-chart">
+    <template>
+        <style include="line-chart-styles"></style>
+
+        <div class="content-container">
+            <div id="chart"></div>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'line-chart',
+            properties: {
+                margin: Object,
+                width: Object,
+                height: Object,
+                parseTime: String,
+                showToken1: Boolean,
+                showToken2: Boolean,
+                showToken3: Boolean
+            },
+            ready: function () {
+                this._initLineChart("/src/utilities/dataLineChart.csv");
+            },
+            _initLineChart: function (dataUrl) {
+                // set the dimensions and margins of the graph
+                this.set('margin', {top: 20, right: 20, bottom: 30, left: 50});
+                this.set('width', 960 - this.margin.left - this.margin.right);
+                this.set('height', 500 - this.margin.top - this.margin.bottom);
+                this.set('parseTime',d3.timeParse("%Y-%m-%d"));
+
+                // set the ranges
+                var x = d3.scaleTime().range([0, this.width]);
+                var y = d3.scaleLinear().range([this.height, 0]);
+
+
+                // append the svg obgect to the body of the page
+                // appends a 'group' element to 'svg'
+                // moves the 'group' element to the top left margin
+                var svg = d3.select(this.$.chart).append("svg")
+                        .attr("width", this.width + this.margin.left + this.margin.right)
+                        .attr("height", this.height + this.margin.top + this.margin.bottom)
+                        .append("g")
+                        .attr("transform",
+                        "translate(" +this.margin.left + "," + this.margin.top + ")");
+
+                var self = this;
+                d3.csv(dataUrl, function(error, data) {
+                    if (error) throw error;
+
+                    // format the data
+                    data.forEach(function(d) {
+                        d.date = self.parseTime(d.date);
+                        d.baseRate = +d.baseRate;
+                        d.token1 = +d.token1;
+                        d.token2 = +d.token2;
+                        d.token3 = +d.token3;
+                    });
+
+                    // Scale the range of the data
+                    x.domain(d3.extent(data, function(d) { return d.date; }));
+                    y.domain([0, d3.max(data, function(d) {
+                        return Math.max(d.baseRate, d.token1, d.token2); })]);
+
+                    // add the X gridlines
+                    svg.append("g")
+                            .attr("class", "grid")
+                            .attr("transform", "translate(0," + self.height + ")")
+                            .call(self._make_x_gridlines(x)
+                                    .tickSize(-self.height)
+                                    .tickFormat("")
+                    );
+
+                    // add the Y gridlines
+                    svg.append("g")
+                            .attr("class", "grid")
+                            .call(self._make_y_gridlines(y)
+                                    .tickSize(-self.width)
+                                    .tickFormat("")
+                    );
+
+                    // add the token1
+                    if(self.showToken1 === true) {
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token1")
+                                .attr("d", self._getTokenArea(x, y, self.height,'token1'));
+                    }
+
+                    // add the token2
+                    if(self.showToken2 === true) {
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token2")
+                                .attr("d", self._getTokenArea(x,y,self.height,'token2'));
+                    }
+
+                    // add the token3
+                    if(self.showToken3 === true) {
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token3")
+                                .attr("d", self._getTokenArea(x,y,self.height,'token3'));
+                    }
+
+                    // Add the valueline path.
+                    svg.append("path")
+                            .data([data])
+                            .attr("class", "baseLine")
+                            .attr("d", self._getBaseRate(x,y));
+
+
+                    // Add the X Axis
+                    var xAxis = d3.axisBottom(x).ticks(8);
+                    svg.append("g")
+                            .attr("transform", "translate(0," + self.height + ")")
+                            .call(xAxis);
+
+                    // Add the Y Axis
+
+                    var yAxis = d3.axisLeft(y).ticks(4);
+
+                    svg.append("g")
+                            .call(yAxis);
+
+                    svg.append("text")
+                            .attr("fill", "black")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", 6)
+                            .attr("dy", "-1.5em")
+                            .style("text-anchor", "end")
+                            .text("Rate (%)");
+
+                });
+            },
+            initChartOne: function (token) {
+                var url;
+                if(token === 'token1') {
+                    this.set('showToken1', this.showToken1 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                } else if (token === 'token2') {
+                    this.set('showToken2', this.showToken2 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                } else if (token === 'token3') {
+                    this.set('showToken3', this.showToken3 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                }else {
+                    this.set('showToken1', this.showToken1 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                };
+
+                this.$.chart.innerHTML = "";
+                this._initLineChart(url);
+            },
+            _getBaseRate: function (x,y) {
+                // define the 1st line
+                return d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.baseRate); });
+            },
+            _getTokenArea: function (x,y,height,token) {
+                // define the area
+                return d3.area()
+                        .x(function(d) { return x(d.date); })
+                        .y0(height)
+                        .y1(function(d) {return y(d[token]); });
+            },
+            _make_x_gridlines: function (x) {
+                return d3.axisBottom(x)
+                        .ticks(15);
+            },
+            _make_y_gridlines: function (y) {
+                return d3.axisLeft(y)
+                        .ticks(15);
+            }
+        });
+    </script>
+</dom-module>

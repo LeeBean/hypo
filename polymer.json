@@ -1,0 +1,17 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/app/hypo-app.html",
+  "fragments": [
+    "src/line-chart/line-chart.html",
+    "src/token-area/token-area.html"
+  ],
+  "sourceGlobs": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}

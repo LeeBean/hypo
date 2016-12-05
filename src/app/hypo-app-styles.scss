@@ -1,0 +1,11 @@
+@import "../utilities/variables";
+
+:host {
+  display: block;
+  height:100%;
+  background:$background;
+}
+
+.green {
+  background:green;
+}

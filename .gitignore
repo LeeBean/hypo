@@ -1,4 +1,8 @@
 bower_components/*
+build/*
+node_modules/*
+images/*
+npm-debug.log
 .idea/*
 .idea/uiDesigner.xml
 !bower_components/.keep

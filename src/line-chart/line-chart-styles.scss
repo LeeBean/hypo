@@ -1,0 +1,66 @@
+@import "../utilities/variables";
+
+:host {
+    display: block;
+    height: 500px;
+}
+
+.content-container > ::content .token1 {
+    fill: $stroke1;
+    stroke: $stroke1;
+    opacity: 1;
+    stroke-opacity: 1;
+    fill-opacity: 0.6;
+}
+
+.content-container > ::content .token2 {
+    fill: $stroke2;
+    stroke: $stroke2;
+    opacity:1;
+    stroke-opacity: 1;
+    fill-opacity:0.4;
+}
+
+.content-container > ::content .token3 {
+    fill: $stroke3;
+    stroke: $stroke3;
+    opacity:1;
+    stroke-opacity: 1;
+    fill-opacity:0.5;
+}
+
+.content-container > ::content text {
+    font-family: Lato;
+    font-size: 13px;
+}
+
+.content-container > ::content .grid line {
+    stroke: white;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+    stroke-width: 1px;
+}
+
+.content-container > ::content .grid path {
+    stroke-width: 0;
+}
+
+.content-container > ::content path,
+.content-container > ::content line {
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
+    stroke-width: 5px;
+}
+
+.content-container > ::content .baseLine {
+    stroke-width: 6px;
+    stroke:green;
+
+}
+
+.content-container > ::content .line-chart svg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
