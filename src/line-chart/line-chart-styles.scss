@@ -5,28 +5,40 @@
     height: 500px;
 }
 
-.content-container > ::content .token1 {
+.content-container > ::content .token1Area {
     fill: $stroke1;
-    stroke: $stroke1;
     opacity: 1;
-    stroke-opacity: 1;
     fill-opacity: 0.6;
+    stroke-opacity: 0;
+    shape-rendering: geometricPrecision;
 }
 
-.content-container > ::content .token2 {
+.content-container > ::content .token2Area {
     fill: $stroke2;
-    stroke: $stroke2;
     opacity:1;
-    stroke-opacity: 1;
     fill-opacity:0.4;
+    stroke-opacity: 0;
+    shape-rendering: geometricPrecision;
 }
 
-.content-container > ::content .token3 {
+.content-container > ::content .token3Area {
     fill: $stroke3;
-    stroke: $stroke3;
     opacity:1;
-    stroke-opacity: 1;
+    stroke-opacity: 0;
     fill-opacity:0.5;
+    shape-rendering: geometricPrecision;
+}
+
+.content-container > ::content .token1Line {
+    stroke:$stroke1;
+}
+
+.content-container > ::content .token2Line {
+    stroke:$stroke2;
+}
+
+.content-container > ::content .token3Line {
+    stroke:$stroke3;
 }
 
 .content-container > ::content text {
@@ -55,7 +67,7 @@
 
 .content-container > ::content .baseLine {
     stroke-width: 6px;
-    stroke:green;
+    stroke:#5AA7FF;
 
 }
 
@@ -63,4 +75,14 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.content-container > ::content .x-axis text {
+    fill:white;
+    font-family: helvetica;
+}
+
+.content-container > ::content .y-axis text {
+    fill:white;
+    font-family: helvetica;
 }

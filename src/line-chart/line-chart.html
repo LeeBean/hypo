@@ -88,46 +88,59 @@
                     if(self.showToken1 === true) {
                         svg.append("path")
                                 .data([data])
-                                .attr("class", "token1")
+                                .attr("class", "token1Area")
                                 .attr("d", self._getTokenArea(x, y, self.height,'token1'));
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token1Line")
+                                .attr("d", self._getBaseRate(x,y,'token1'));
                     }
 
                     // add the token2
                     if(self.showToken2 === true) {
                         svg.append("path")
                                 .data([data])
-                                .attr("class", "token2")
+                                .attr("class", "token2Area")
                                 .attr("d", self._getTokenArea(x,y,self.height,'token2'));
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token2Line")
+                                .attr("d", self._getBaseRate(x,y,'token2'));
                     }
 
                     // add the token3
                     if(self.showToken3 === true) {
                         svg.append("path")
                                 .data([data])
-                                .attr("class", "token3")
+                                .attr("class", "token3Area")
                                 .attr("d", self._getTokenArea(x,y,self.height,'token3'));
+                        svg.append("path")
+                                .data([data])
+                                .attr("class", "token3Line")
+                                .attr("d", self._getBaseRate(x,y,'token3'));
                     }
 
-                    // Add the valueline path.
                     svg.append("path")
                             .data([data])
                             .attr("class", "baseLine")
-                            .attr("d", self._getBaseRate(x,y));
+                            .attr("d", self._getBaseRate(x,y,'baseRate'));
 
 
                     // Add the X Axis
                     var xAxis = d3.axisBottom(x).ticks(8);
                     svg.append("g")
                             .attr("transform", "translate(0," + self.height + ")")
+                            .attr("class", "x-axis")
                             .call(xAxis);
 
                     svg.append("text")
-                            .attr("fill", "black")
+                            .attr("fill", "white")
                             .attr("x", 905)
                             .attr("y", 450)
                             .attr("dy", 25)
                             .attr("dx", "-1.5em")
                             .style("text-anchor", "end")
+                            .style("font-family", "helvetica")
                             .text("Laufzeit (Monate)");
 
 
@@ -136,14 +149,17 @@
                     var yAxis = d3.axisLeft(y).ticks(4);
 
                     svg.append("g")
+                            .attr("class", "y-axis")
                             .call(yAxis);
 
                     svg.append("text")
-                            .attr("fill", "black")
+                            .attr("fill", "white")
+                            .attr("text-color","white")
                             .attr("transform", "rotate(-90)")
                             .attr("y", 6)
                             .attr("dy", "-2em")
                             .style("text-anchor", "end")
+                            .style("font-family", "helvetica")
                             .text("Zinssatz (%)");
 
                 });
@@ -167,11 +183,11 @@
                 this.$.chart.innerHTML = "";
                 this._initLineChart(url);
             },
-            _getBaseRate: function (x,y) {
+            _getBaseRate: function (x,y,token) {
                 // define the 1st line
                 return d3.line()
                         .x(function(d) { return x(d.date); })
-                        .y(function(d) { return y(d.baseRate); });
+                        .y(function(d) { return y(d[token]); });
             },
             _getTokenArea: function (x,y,height,token) {
                 // define the area

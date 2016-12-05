@@ -117,7 +117,9 @@ gulp.task('watchSass', function() {
 
 //This is currently not used. But you can enable by uncommenting 
 // " //return gulp.src([basePath+ext,...excludeDirs])" above the return.
-var excludeDirs = ['!${basePath}/bower_components/${ext}','!${basePath}/images/${ext}']
+//var excludeDirs = ['!${basePath}/bower_components/${ext}','!${basePath}/images/${ext}']
+
+var excludeDirs = ['!bower_components/${ext}','!${basePath}/images/${ext}']
 /**
  *
  * Enable for advanced use:
