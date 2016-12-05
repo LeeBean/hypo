@@ -29,9 +29,9 @@
             },
             _initLineChart: function (dataUrl) {
                 // set the dimensions and margins of the graph
-                this.set('margin', {top: 20, right: 20, bottom: 30, left: 50});
+                this.set('margin', {top: 20, right: 20, bottom: 50, left: 50});
                 this.set('width', 960 - this.margin.left - this.margin.right);
-                this.set('height', 500 - this.margin.top - this.margin.bottom);
+                this.set('height', 510- this.margin.top - this.margin.bottom);
                 this.set('parseTime',d3.timeParse("%Y-%m-%d"));
 
                 // set the ranges
@@ -121,6 +121,16 @@
                             .attr("transform", "translate(0," + self.height + ")")
                             .call(xAxis);
 
+                    svg.append("text")
+                            .attr("fill", "black")
+                            .attr("x", 905)
+                            .attr("y", 450)
+                            .attr("dy", 25)
+                            .attr("dx", "-1.5em")
+                            .style("text-anchor", "end")
+                            .text("Laufzeit (Monate)");
+
+
                     // Add the Y Axis
 
                     var yAxis = d3.axisLeft(y).ticks(4);
@@ -132,9 +142,9 @@
                             .attr("fill", "black")
                             .attr("transform", "rotate(-90)")
                             .attr("y", 6)
-                            .attr("dy", "-1.5em")
+                            .attr("dy", "-2em")
                             .style("text-anchor", "end")
-                            .text("Rate (%)");
+                            .text("Zinssatz (%)");
 
                 });
             },

@@ -11,8 +11,78 @@
                 <div id="token1" class="token">
 
                 </div>
+                <div id="token1Text" class="tokenText">
+                    <template is="dom-if" if="[[showToken1]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Fest</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">Langfristige Planung, Sicherheit</div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken2]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Abhängig von der Bank</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">Keine feste Dauer</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">ederzeit kündbar, Flexibilität
+                        </div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken3]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
+                    </template>
+                </div>
                 <div id="token2" class="token">
 
+                </div>
+                <div id="token2Text" class="tokenText">
+                    <template is="dom-if" if="[[showToken1B]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Fest</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">Langfristige Planung, Sicherheit</div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken2B]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Abhängig von der Bank</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">Keine feste Dauer</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">ederzeit kündbar, Flexibilität
+                        </div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken3B]]">
+                        <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -33,46 +103,62 @@
                     }
                 },
                 showToken1: Boolean,
-                showToken2: Boolean
+                showToken2: Boolean,
+                showToken3: Boolean,
+                showToken1B: Boolean,
+                showToken2B: Boolean,
+                showToken3B: Boolean
             },
             keyBindings: {
                 '* pageup pagedown left right down up home end space enter @ ~ " $ ? ! \\ + : # backspace': '_updatePressed',
-                'q': '_token1Action',
-                'w': '_token2Action',
-                'e': '_token3Action',
+                'q': '_token1ActionA',
+                'a': '_token1ActionB',
+                'w': '_token2ActionA',
+                's': '_token2ActionB',
+                'e': '_token3ActionA',
+                'd': '_token3ActionB',
                 'r': '_token4Action',
                 't': '_token5Action',
-                's': '_token6Action',
                 'shift+tab shift+space': '_updatePressed'
             },
             _updatePressed: function(event) {
                 console.log(event.detail);
             },
-            _token1Action: function () {
-                this.set('showToken1', this.showToken1 != true);
-                if(this.showToken1) {
-                    $(this.$.token1).css( "border", "20px solid green");
+            _changeLayoutOfArea: function (element,showToken, color) {
+                if(showToken) {
+                    $(element).css( "border", "20px solid " + color);
                 } else {
-                    $(this.$.token1).css( "border", "5px solid #5AA7FF");
+                    $(element).css( "border", "5px solid #5AA7FF");
                 }
+            },
+            _token1ActionA: function () {
+                this.set('showToken1', this.showToken1 != true);
+                this._changeLayoutOfArea(this.$.token1,this.showToken1, 'green');
                 this.fire('tokenEvent','token1');
             },
-            _token2Action: function () {
+            _token1ActionB: function () {
+                this.set('showToken1B', this.showToken1B != true);
+                this._changeLayoutOfArea(this.$.token2,this.showToken1B, 'green');
+                this.fire('tokenEvent','token1');
+            },
+            _token2ActionA: function () {
                 this.set('showToken2', this.showToken2 != true);
-                if(this.showToken2) {
-                    $(this.$.token2).css( "border", "20px solid red");
-                } else {
-                    $(this.$.token2).css( "border", "5px solid #5AA7FF");
-                }
+                this._changeLayoutOfArea(this.$.token1,this.showToken2, 'red');
                 this.fire('tokenEvent','token2');
             },
-            _token3Action: function () {
+            _token2ActionB: function () {
+                this.set('showToken2B', this.showToken2B != true);
+                this._changeLayoutOfArea(this.$.token2,this.showToken2B, 'red');
+                this.fire('tokenEvent','token2');
+            },
+            _token3ActionA: function () {
                 this.set('showToken3', this.showToken3 != true);
-                if(this.showToken3) {
-                    $(this.$.token2).css( "border", "20px solid grey");
-                } else {
-                    $(this.$.token2).css( "border", "5px solid #5AA7FF");
-                }
+                this._changeLayoutOfArea(this.$.token1,this.showToken3, 'grey');
+                this.fire('tokenEvent','token3');
+            },
+            _token3ActionB: function () {
+                this.set('showToken3B', this.showToken3B != true);
+                this._changeLayoutOfArea(this.$.token2,this.showToken3B, 'grey');
                 this.fire('tokenEvent','token3');
             },
             _token4Action: function () {
