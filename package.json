@@ -27,5 +27,8 @@
   "engines": {
     "node": ">=4.0"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "gulp-sass": "^2.3.2"
+  }
 }

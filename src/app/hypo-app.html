@@ -7,11 +7,10 @@
 <link rel="import" href="hypo-app-styles.html">
 <link rel="import" href="../utilities/imports.html">
 
-
-
 <dom-module id="hypo-app">
-  <template>
-    <style include="hypo-app-styles"></style>
+    <link rel="import" type="css" href="token-area-styles.scss">
+
+    <template>
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
