@@ -124,41 +124,43 @@
             _updatePressed: function(event) {
                 console.log(event.detail);
             },
-            _changeLayoutOfArea: function (element,showToken, color) {
+            _changeLayoutOfArea: function (element,showToken, cssClass) {
                 if(showToken) {
-                    $(element).css( "border", "20px solid " + color);
+                    $(element).addClass(cssClass);
+                    $(this.$.token1Text).slideDown();
                 } else {
                     $(element).css( "border", "5px solid #5AA7FF");
+                    $(element).removeClass(cssClass);
                 }
             },
             _token1ActionA: function () {
                 this.set('showToken1', this.showToken1 != true);
-                this._changeLayoutOfArea(this.$.token1,this.showToken1, 'green');
+                this._changeLayoutOfArea(this.$.token1,this.showToken1, 'tokenShadowGreen');
                 this.fire('tokenEvent','token1');
             },
             _token1ActionB: function () {
                 this.set('showToken1B', this.showToken1B != true);
-                this._changeLayoutOfArea(this.$.token2,this.showToken1B, 'green');
+                this._changeLayoutOfArea(this.$.token2,this.showToken1B, 'tokenShadowGreen');
                 this.fire('tokenEvent','token1');
             },
             _token2ActionA: function () {
                 this.set('showToken2', this.showToken2 != true);
-                this._changeLayoutOfArea(this.$.token1,this.showToken2, 'red');
+                this._changeLayoutOfArea(this.$.token1,this.showToken2, 'tokenShadowRed');
                 this.fire('tokenEvent','token2');
             },
             _token2ActionB: function () {
                 this.set('showToken2B', this.showToken2B != true);
-                this._changeLayoutOfArea(this.$.token2,this.showToken2B, 'red');
+                this._changeLayoutOfArea(this.$.token2,this.showToken2B, 'tokenShadowRed');
                 this.fire('tokenEvent','token2');
             },
             _token3ActionA: function () {
                 this.set('showToken3', this.showToken3 != true);
-                this._changeLayoutOfArea(this.$.token1,this.showToken3, 'grey');
+                this._changeLayoutOfArea(this.$.token1,this.showToken3, 'tokenShadowGrey');
                 this.fire('tokenEvent','token3');
             },
             _token3ActionB: function () {
                 this.set('showToken3B', this.showToken3B != true);
-                this._changeLayoutOfArea(this.$.token2,this.showToken3B, 'grey');
+                this._changeLayoutOfArea(this.$.token2,this.showToken3B, 'tokenShadowGrey');
                 this.fire('tokenEvent','token3');
             },
             _token4Action: function () {
