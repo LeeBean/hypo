@@ -8,9 +8,31 @@
     margin-top:50px;
     margin-left: auto;
     margin-right: auto;
-    width:500px;
+    width:620px;
     height:350px;
     position:relative;
+    padding-top:20px;
+}
+
+@mixin box-shadow($width,$color) {
+    -webkit-box-shadow:0 0 $width $color;
+    -moz-box-shadow: 0 0 $width $color;
+    box-shadow:0 0 $width $color;
+}
+
+.tokenShadowGreen {
+    @include box-shadow(70px, green);
+    border: 5px solid green!important;
+}
+
+.tokenShadowRed {
+    @include box-shadow(70px, red);
+    border: 5px solid red!important;
+}
+
+.tokenShadowGrey {
+    @include box-shadow(70px, grey);
+    border: 5px solid grey!important;
 }
 
 .token {
@@ -23,9 +45,8 @@
 
 .tokenText {
     width:150px;
-    height:150px;
+    height:120px;
     position:absolute;
-
 }
 
 .detailName {
@@ -36,6 +57,7 @@
 
 .detailText {
     margin-left: 10px;
+    margin-bottom:5px;
 }
 
 #token1 {

@@ -7,9 +7,28 @@
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
+  width: 620px;
   height: 350px;
-  position: relative; }
+  position: relative;
+  padding-top: 20px; }
+
+.tokenShadowGreen {
+  -webkit-box-shadow: 0 0 70px green;
+  -moz-box-shadow: 0 0 70px green;
+  box-shadow: 0 0 70px green;
+  border: 5px solid green !important; }
+
+.tokenShadowRed {
+  -webkit-box-shadow: 0 0 70px red;
+  -moz-box-shadow: 0 0 70px red;
+  box-shadow: 0 0 70px red;
+  border: 5px solid red !important; }
+
+.tokenShadowGrey {
+  -webkit-box-shadow: 0 0 70px grey;
+  -moz-box-shadow: 0 0 70px grey;
+  box-shadow: 0 0 70px grey;
+  border: 5px solid grey !important; }
 
 .token {
   width: 150px;
@@ -19,7 +38,7 @@
 
 .tokenText {
   width: 150px;
-  height: 150px;
+  height: 120px;
   position: absolute; }
 
 .detailName {
@@ -28,7 +47,8 @@
   font-color: red; }
 
 .detailText {
-  margin-left: 10px; }
+  margin-left: 10px;
+  margin-bottom: 5px; }
 
 #token1 {
   left: 0px; }
