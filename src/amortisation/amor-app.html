@@ -18,8 +18,8 @@
                         </div>
                     </div>
                     <div class="row2">
-                        <paper-button id="row2-button1" class="button" on-click="_showAmor">Direkt</paper-button>
-                        <paper-button id="row2-button2" class="button" on-click="_showAmor">Indirekt</paper-button>
+                        <paper-button id="row2-button1" class="button" on-click="_showDirect">Direkt</paper-button>
+                        <paper-button id="row2-button2" class="button" on-click="_showIndirect">Indirekt</paper-button>
                     </div>
                 </template>
 
@@ -42,8 +42,8 @@
 
                     <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
                         <div class="row4">
-                            <paper-button id="row4-button1" class="button" on-click="_showAmor">Steuernachteile</paper-button>
-                            <paper-button id="row4-button2" class="button" on-click="_showAmor">Steuervorteile</paper-button>
+                            <paper-button id="row4-button1" class="button" on-click="_showDisadvantages">Steuernachteile</paper-button>
+                            <paper-button id="row4-button2" class="button" on-click="_showBenefits">Steuervorteile</paper-button>
                         </div>
                     </template>
                 </template>
@@ -65,10 +65,10 @@
                 </div>
 
                 <div class="row6">
-                    <paper-button id="row6-button1" class="button" on-click="_showAmor">Amortisation</paper-button>
+                    <paper-button id="row6-button1" class="button" on-click="_showDirectOrIndirect">Direkt oder Indirekt?</paper-button>
                 </div>
                 <div class="row7">
-                    <template is="dom-if" if="[[showBenefits]]">
+                    <template is="dom-if" if="[[showDirectOrIndirect]]">
                         <div style="width:250px;">
                             Vorteil hängt von der Hypothek, Einkommen, Zinsbelastung und erzielbaren Kredite ab.
                         </div>
@@ -112,27 +112,27 @@
                 },
                 showRow1: {
                     type:Boolean,
-                    value:true
+                    value:false
                 },
                 showDirect: {
                     type:Boolean,
-                    value:true
+                    value:false
                 },
                 showIndirect: {
                     type:Boolean,
-                    value:true
+                    value:false
                 },
                 showDisadvantages: {
                     type:Boolean,
-                    value:true
+                    value:false
                 },
                 showBenefits: {
                     type:Boolean,
-                    value:true
+                    value:false
                 },
                 showDirectOrIndirect: {
                     type:Boolean,
-                    value:true
+                    value:false
                 }
             },
             keyBindings: {
@@ -164,6 +164,21 @@
             ,
             _equalsTwo: function (a,b) {
                 return a && b;
+            },
+            _showDirect: function () {
+                this.set('showDirect', this.showDirect != true);
+            },
+            _showIndirect: function () {
+                this.set('showIndirect', this.showIndirect != true);
+            },
+            _showDisadvantages: function () {
+                this.set('showDisadvantages', this.showDisadvantages != true);
+            },
+            _showBenefits: function () {
+                this.set('showBenefits', this.showBenefits != true);
+            },
+            _showDirectOrIndirect: function () {
+                this.set('showDirectOrIndirect', this.showDirectOrIndirect != true);
             }
         });
     </script>
