@@ -16,6 +16,17 @@
                 <div id="token1Text" class="tokenText">
                     <template is="dom-if" if="[[showToken1]]">
                         <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken2]]">
+                        <span class="detailName">-Zinssatz</span>
                         <div class="detailText">Fest</div>
 
                         <span class="detailName">-Dauer</span>
@@ -25,7 +36,7 @@
                         <div class="detailText">Langfristige Planung, Sicherheit</div>
                     </template>
 
-                    <template is="dom-if" if="[[showToken2]]">
+                    <template is="dom-if" if="[[showToken3]]">
                         <span class="detailName">-Zinssatz</span>
                         <div class="detailText">Abhängig von der Bank</div>
 
@@ -35,17 +46,6 @@
                         <span class="detailName">-Vorteil</span>
                         <div class="detailText">ederzeit kündbar, Flexibilität
                         </div>
-                    </template>
-
-                    <template is="dom-if" if="[[showToken3]]">
-                        <span class="detailName">-Zinssatz</span>
-                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
-
-                        <span class="detailName">-Dauer</span>
-                        <div class="detailText">2-6 Jahre</div>
-
-                        <span class="detailName">-Vorteil</span>
-                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
                     </template>
                 </div>
                 <div id="token2" class="token">
@@ -54,6 +54,17 @@
                 <div id="token2Text" class="tokenText">
                     <template is="dom-if" if="[[showToken1B]]">
                         <span class="detailName">-Zinssatz</span>
+                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
+
+                        <span class="detailName">-Dauer</span>
+                        <div class="detailText">2-6 Jahre</div>
+
+                        <span class="detailName">-Vorteil</span>
+                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
+                    </template>
+
+                    <template is="dom-if" if="[[showToken2B]]">
+                        <span class="detailName">-Zinssatz</span>
                         <div class="detailText">Fest</div>
 
                         <span class="detailName">-Dauer</span>
@@ -63,7 +74,7 @@
                         <div class="detailText">Langfristige Planung, Sicherheit</div>
                     </template>
 
-                    <template is="dom-if" if="[[showToken2B]]">
+                    <template is="dom-if" if="[[showToken3B]]">
                         <span class="detailName">-Zinssatz</span>
                         <div class="detailText">Abhängig von der Bank</div>
 
@@ -73,17 +84,6 @@
                         <span class="detailName">-Vorteil</span>
                         <div class="detailText">ederzeit kündbar, Flexibilität
                         </div>
-                    </template>
-
-                    <template is="dom-if" if="[[showToken3B]]">
-                        <span class="detailName">-Zinssatz</span>
-                        <div class="detailText">Anpassung alle 3,6,12 Monate</div>
-
-                        <span class="detailName">-Dauer</span>
-                        <div class="detailText">2-6 Jahre</div>
-
-                        <span class="detailName">-Vorteil</span>
-                        <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
                     </template>
                 </div>
             </div>
@@ -141,6 +141,11 @@
                 't': '_token5Action',
                 'shift+tab shift+space': '_updatePressed'
             },
+            ready: function () {
+//                this.$.token1.addEventListener("click", function (e) {
+//                    console.log(e);
+//                });
+            },
             _updatePressed: function(event) {
                 console.log(event.detail);
             },
@@ -193,6 +198,9 @@
             },
             _token6Action: function () {
                 this.fire('tokenEvent','token6');
+            },
+            _onToken1: function (event) {
+                console.log(event);
             }
         });
     </script>
