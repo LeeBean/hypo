@@ -23,30 +23,31 @@
                     </div>
                 </template>
 
-                <template is="dom-if" if="[[showDirect]]">
-                    <div class="row3">
+                <div class="row3">
+                    <template is="dom-if" if="[[showDirect]]">
                         <ul>
                             <li>Regelmässige Zahlung</li>
                             <li>Zinsbelastung nimmt ab</li>
                         </ul>
-
-                        <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
-                            <div id="row-3-ul2">
-                                <ul>
-                                    <li>Regelmässige Zahlung</li>
-                                    <li>Zinsbelastung nimmt ab</li>
-                                </ul>
-                            </div>
-                        </template>
-                    </div>
-
-                    <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
-                        <div class="row4">
-                            <paper-button id="row4-button1" class="button" on-click="_showDisadvantages">Steuernachteile</paper-button>
-                            <paper-button id="row4-button2" class="button" on-click="_showBenefits">Steuervorteile</paper-button>
+                     </template>
+                    <template is="dom-if" if="[[showIndirect]]">
+                        <div id="row-3-ul2">
+                            <ul>
+                                <li>Regelmässige Zahlung</li>
+                                <li>Zinsbelastung nimmt ab</li>
+                            </ul>
                         </div>
                     </template>
-                </template>
+                </div>
+
+                <div class="row4">
+                    <template is="dom-if" if="[[showDirect]]">
+                        <paper-button id="row4-button1" class="button" on-click="_showDisadvantages">Steuernachteile</paper-button>
+                    </template>
+                    <template is="dom-if" if="[[showIndirect]]">
+                        <paper-button id="row4-button2" class="button" on-click="_showBenefits">Steuervorteile</paper-button>
+                    </template>
+                </div>
 
                 <div class="row5">
                     <template is="dom-if" if="[[showDisadvantages]]">
@@ -64,16 +65,18 @@
                     </template>
                 </div>
 
-                <div class="row6">
-                    <paper-button id="row6-button1" class="button" on-click="_showDirectOrIndirect">Direkt oder Indirekt?</paper-button>
-                </div>
-                <div class="row7">
+                <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
+                    <div class="row6">
+                        <paper-button id="row6-button1" class="button" on-click="_showDirectOrIndirect">Direkt oder Indirekt?</paper-button>
+                    </div>
                     <template is="dom-if" if="[[showDirectOrIndirect]]">
-                        <div style="width:250px;">
-                            Vorteil hängt von der Hypothek, Einkommen, Zinsbelastung und erzielbaren Kredite ab.
+                        <div class="row7">
+                            <div style="width:250px;">
+                                Vorteil hängt von der Hypothek, Einkommen, Zinsbelastung und erzielbaren Kredite ab.
+                            </div>
                         </div>
                     </template>
-                </div>
+                </template>
             </div>
         </div>
 
@@ -159,17 +162,36 @@
                 }
             },
             _showAmor: function () {
-                this.set('showRow1', this.showRow1 != true);
+                var showRow1 = this.showRow1 != true;
+                this.set('showRow1', showRow1);
+                if(showRow1 === false) {
+                    this.set('showDirect', false);
+                    this.set('showIndirect', false);
+                    this.set('showDisadvantages', false);
+                    this.set('showBenefits', false);
+                    this.set('showDirectOrIndirect', false);
+                }
             }
             ,
             _equalsTwo: function (a,b) {
                 return a && b;
             },
             _showDirect: function () {
-                this.set('showDirect', this.showDirect != true);
+                var showDirect = this.showDirect != true;
+                this.set('showDirect', showDirect);
+                if(showDirect === false) {
+                    this.set('showDisadvantages', false);
+                    this.set('showDirectOrIndirect', false);
+                }
+
             },
             _showIndirect: function () {
-                this.set('showIndirect', this.showIndirect != true);
+                var showIndirect = this.showIndirect != true;
+                this.set('showIndirect', showIndirect);
+                if(showIndirect === false) {
+                    this.set('showBenefits', false);
+                    this.set('showDirectOrIndirect', false);
+                }
             },
             _showDisadvantages: function () {
                 this.set('showDisadvantages', this.showDisadvantages != true);
