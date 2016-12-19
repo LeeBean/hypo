@@ -1,0 +1,101 @@
+:host {
+  display: block;
+  height: 400px; }
+
+.container {
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 620px;
+  height: 500px;
+  position: relative;
+  padding-top: 20px;
+  color: white;
+  font-family: helvetica; }
+
+ul {
+  margin: 0; }
+
+.button {
+  color: white;
+  border: 1px solid white;
+  border-radius: 0;
+  font-family: helvetica;
+  margin: 0; }
+
+#row1-button1 {
+  position: absolute;
+  left: 10px;
+  top: 30px;
+  font-size: 20px; }
+
+.row1 {
+  position: absolute;
+  width: 250px;
+  left: 210px;
+  font-size: 15px;
+  margin: 0; }
+
+.row2 {
+  position: absolute;
+  left: 10px;
+  top: 140px;
+  width: 500px;
+  height: 50px; }
+
+.row3 {
+  position: absolute;
+  left: 10px;
+  top: 190px;
+  width: 500px;
+  height: 50px; }
+
+.row4 {
+  position: absolute;
+  left: 10px;
+  top: 265px;
+  width: 500px;
+  height: 50px;
+  font-size: 12px; }
+
+.row5 {
+  position: absolute;
+  left: 10px;
+  top: 305px; }
+
+.row6 {
+  position: absolute;
+  left: 10px;
+  top: 380px;
+  height: 100px;
+  width: 100px; }
+
+.row7 {
+  position: absolute;
+  left: 10px;
+  top: 430px;
+  height: 100px;
+  width: 100px; }
+
+#row2-button1 {
+  position: absolute;
+  left: 0px; }
+
+#row2-button2 {
+  position: absolute;
+  left: 300px; }
+
+#row4-button2 {
+  position: absolute;
+  left: 300px; }
+
+#row-3-ul2 {
+  position: absolute;
+  top: 0;
+  left: 300px; }
+
+#row-5-ul2 {
+  position: absolute;
+  top: 0;
+  left: 300px; }

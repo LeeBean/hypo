@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../utilities/imports.html">
 
 <dom-module id="token-area">
@@ -93,13 +95,31 @@
         Polymer({
             is: 'token-area',
             behaviors: [
-                Polymer.IronA11yKeysBehavior
+                Polymer.IronA11yKeysBehavior,
+                Polymer.NeonAnimationRunnerBehavior
             ],
             properties: {
                 keyEventTarget: {
                     type: Object,
                     value: function() {
                         return document.body;
+                    }
+                },
+                animationConfig: {
+                    type: Object,
+                    value: function(){
+                        return {
+                            'expand': {
+                                'name': 'fade-in-animation',
+                                'node': this.$.token1Text,
+                                timing: {duration: 1000}
+                            },
+                            'expand2': {
+                                'name': 'fade-in-animation',
+                                'node': this.$.token2Text,
+                                timing: {duration: 1000}
+                            }
+                        };
                     }
                 },
                 showToken1: Boolean,
@@ -125,6 +145,8 @@
                 console.log(event.detail);
             },
             _changeLayoutOfArea: function (element,showToken, cssClass) {
+                this.playAnimation('expand');
+                this.playAnimation('expand2');
                 if(showToken) {
                     $(element).addClass(cssClass);
                     $(this.$.token1Text).slideDown();

@@ -1,0 +1,170 @@
+<link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../utilities/imports.html">
+
+<dom-module id="amor-app">
+    <link rel="import" type="css" href="amor-app-styles.css">
+
+    <template>
+        <div class="content-container">
+            <div class="container">
+                <paper-button id="row1-button1" class="button" on-click="_showAmor">Amortisation</paper-button>
+                <template is="dom-if" if="[[showRow1]]">
+                    <div class="row1">
+                        <div>
+                            Die direkte / indirekte Amortisation ist die regelmässige Rückzahlung der Hypothek in einem definierten Zeitraum.
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <paper-button id="row2-button1" class="button" on-click="_showAmor">Direkt</paper-button>
+                        <paper-button id="row2-button2" class="button" on-click="_showAmor">Indirekt</paper-button>
+                    </div>
+                </template>
+
+                <template is="dom-if" if="[[showDirect]]">
+                    <div class="row3">
+                        <ul>
+                            <li>Regelmässige Zahlung</li>
+                            <li>Zinsbelastung nimmt ab</li>
+                        </ul>
+
+                        <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
+                            <div id="row-3-ul2">
+                                <ul>
+                                    <li>Regelmässige Zahlung</li>
+                                    <li>Zinsbelastung nimmt ab</li>
+                                </ul>
+                            </div>
+                        </template>
+                    </div>
+
+                    <template is="dom-if" if="[[_equalsTwo(showDirect,showIndirect)]]">
+                        <div class="row4">
+                            <paper-button id="row4-button1" class="button" on-click="_showAmor">Steuernachteile</paper-button>
+                            <paper-button id="row4-button2" class="button" on-click="_showAmor">Steuervorteile</paper-button>
+                        </div>
+                    </template>
+                </template>
+
+                <div class="row5">
+                    <template is="dom-if" if="[[showDisadvantages]]">
+                        <div style="width:150px;">
+                            Reduktion der Steuerabzüge, da Abnahme der Zinsen
+                        </div>
+                    </template>
+
+                    <template is="dom-if" if="[[showBenefits]]">
+                        <div id="row-5-ul2">
+                            <div style="width:150px;">
+                                Konstante Steuernabzüge der Zinsen
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="row6">
+                    <paper-button id="row6-button1" class="button" on-click="_showAmor">Amortisation</paper-button>
+                </div>
+                <div class="row7">
+                    <template is="dom-if" if="[[showBenefits]]">
+                        <div style="width:250px;">
+                            Vorteil hängt von der Hypothek, Einkommen, Zinsbelastung und erzielbaren Kredite ab.
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'amor-app',
+            behaviors: [
+                Polymer.IronA11yKeysBehavior,
+                Polymer.NeonAnimationRunnerBehavior
+            ],
+            properties: {
+                keyEventTarget: {
+                    type: Object,
+                    value: function() {
+                        return document.body;
+                    }
+                },
+                animationConfig: {
+                    type: Object,
+                    value: function(){
+                        return {
+                            'expand': {
+                                'name': 'fade-in-animation',
+                                'node': this.$.token1Text,
+                                timing: {duration: 1000}
+                            },
+                            'expand2': {
+                                'name': 'fade-in-animation',
+                                'node': this.$.token2Text,
+                                timing: {duration: 1000}
+                            }
+                        };
+                    }
+                },
+                showRow1: {
+                    type:Boolean,
+                    value:true
+                },
+                showDirect: {
+                    type:Boolean,
+                    value:true
+                },
+                showIndirect: {
+                    type:Boolean,
+                    value:true
+                },
+                showDisadvantages: {
+                    type:Boolean,
+                    value:true
+                },
+                showBenefits: {
+                    type:Boolean,
+                    value:true
+                },
+                showDirectOrIndirect: {
+                    type:Boolean,
+                    value:true
+                }
+            },
+            keyBindings: {
+                '* pageup pagedown left right down up home end space enter @ ~ " $ ? ! \\ + : # backspace': '_updatePressed',
+                'q': '_token1ActionA',
+                'a': '_token1ActionB',
+                'w': '_token2ActionA',
+                's': '_token2ActionB',
+                'e': '_token3ActionA',
+                'd': '_token3ActionB',
+                'r': '_token4Action',
+                't': '_token5Action',
+                'shift+tab shift+space': '_updatePressed'
+            },
+            _changeLayoutOfArea: function (element,showToken, cssClass) {
+                this.playAnimation('expand');
+                this.playAnimation('expand2');
+                if(showToken) {
+                    $(element).addClass(cssClass);
+                    $(this.$.token1Text).slideDown();
+                } else {
+                    $(element).css( "border", "5px solid #5AA7FF");
+                    $(element).removeClass(cssClass);
+                }
+            },
+            _showAmor: function () {
+                this.set('showRow1', this.showRow1 != true);
+            }
+            ,
+            _equalsTwo: function (a,b) {
+                return a && b;
+            }
+        });
+    </script>
+</dom-module>

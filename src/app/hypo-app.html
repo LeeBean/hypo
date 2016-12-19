@@ -4,12 +4,11 @@
 <link rel="import" href="../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../line-chart/line-chart.html">
 <link rel="import" href="../token-area/token-area.html">
-<link rel="import" href="hypo-app-styles.html">
 <link rel="import" href="../utilities/imports.html">
+<link rel="import" href="../amortisation/amor-app.html">
 
 <dom-module id="hypo-app">
-    <link rel="import" type="css" href="token-area-styles.scss">
-
+    <link rel="import" type="css" href="hypo-app-styles.scss">
     <template>
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -20,19 +19,13 @@
     </app-route>
 
     <div style="height: 100%;width:100%">
-        <template is="dom-if" if="[[_equal(route.path, 'person')]]">
-          <p>ok</p>
+        <template is="dom-if" if="[[_equal(route.path, 'amortisation')]]">
+            <amor-app></amor-app>
         </template>
-        <template is="dom-if" if="[[chart1]]">
-
+        <template is="dom-if" if="[[_equal(route.path, 'hypo')]]">
+            <line-chart id="lineChart"></line-chart>
+            <token-area></token-area>
         </template>
-
-        <!--<x-key-aware></x-key-aware>-->
-
-        <!--<paper-button on-click="_showChart" class="custom green">toggles</paper-button>-->
-
-        <line-chart id="lineChart"></line-chart>
-        <token-area></token-area>
     </div>
   </template>
 
@@ -43,6 +36,8 @@
             this.addEventListener('tokenEvent', this._tokenAction);
         },
         _equal: function(a, b) {
+            console.log(a);
+            console.log(b);
           return a === b;
         },
         _computeSelectedTab: function(sections, section) {
