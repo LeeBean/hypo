@@ -43,13 +43,9 @@
         _computeSelectedTab: function(sections, section) {
           return sections.indexOf(section);
         },
-        _showChart: function() {
-        // this.set('chart1', this.chart1 != true);
-        var googleChart = this.$.test;
-        console.log(googleChart);
-        },
         _tokenAction: function (event) {
-            var lineChart = this.$.lineChart;
+            var lineChart = this.$$('#lineChart');
+            //var lineChart = this.$$.('#lineChart');
             lineChart.initChartOne(event.detail);
         }
     });
