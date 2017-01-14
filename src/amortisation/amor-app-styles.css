@@ -7,7 +7,7 @@
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
-  width: 620px;
+  width: 650px;
   height: 500px;
   position: relative;
   padding-top: 20px;
@@ -97,7 +97,8 @@ ul {
 #row-3-ul2 {
   position: absolute;
   top: 0;
-  left: 300px; }
+  left: 300px;
+  width: 250px; }
 
 #row-5-ul2 {
   position: absolute;

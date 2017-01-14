@@ -58,9 +58,7 @@
   shape-rendering: geometricPrecision; }
 
 .content-container > ::content .line-chart svg {
-  display: block;
-  margin-left: auto;
-  margin-right: auto; }
+  display: block; }
 
 .content-container > ::content .x-axis text {
   fill: white;

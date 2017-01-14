@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../line-chart/line-chart.html">
+<link rel="import" href="../mini-charts/mini-charts.html">
 <link rel="import" href="../token-area/token-area.html">
 <link rel="import" href="../utilities/imports.html">
 <link rel="import" href="../amortisation/amor-app.html">
@@ -26,6 +27,10 @@
             <line-chart id="lineChart"></line-chart>
             <token-area></token-area>
         </template>
+        <template is="dom-if" if="[[_equal(route.path, 'mini')]]">
+            <mini-charts></mini-charts>
+
+        </template>
     </div>
   </template>
 
@@ -36,8 +41,7 @@
             this.addEventListener('tokenEvent', this._tokenAction);
         },
         _equal: function(a, b) {
-            console.log(a);
-            console.log(b);
+
           return a === b;
         },
         _computeSelectedTab: function(sections, section) {
