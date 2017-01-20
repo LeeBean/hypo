@@ -2,44 +2,45 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/d3-tip/index.js">
 
-<dom-module id="mini-charts">
-    <link rel="import" type="css" href="mini-charts-styles.css">
+<dom-module id="mini-chart">
+    <link rel="import" type="css" href="../mini-chart/mini-chart-styles.css">
 
     <template>
         <div id="test" class="content-container">
-            <div class="token-container"></div>
             <div id="chart"></div>
-            <div class="text-container">
-                <span class="detailName">-Zinssatz</span>
-                <div class="detailText">Anpassung alle 3,6,12 Monate</div>
-
-                <span class="detailName">-Dauer</span>
-                <div class="detailText">2-6 Jahre</div>
-
-                <span class="detailName">-Vorteil</span>
-                <div class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</div>
-            </div>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: 'mini-charts',
+            is: 'mini-chart',
             properties: {
                 margin: Object,
                 width: Object,
+                height: Object,
                 x1: Object,
                 x0: Object,
                 y: Object,
                 z: Object,
                 svg: Object,
-                details: Array,
+                options: Array,
+                legendNames: String,
+                legendColors:String,
+                barData: String,
+                baseRateData: String,
                 parseTime: String,
-                showToken1: Boolean,
-                showToken2: Boolean,
-                showToken3: Boolean
+            },
+            created: function(){
+                this.legend = [];
+                this.options = [];
             },
             ready: function () {
+                this._initLineChart();
+            },
+            changeScenario: function (barData,baseRateData) {
+                this.$.chart.innerHTML = "";
+                this.barData = barData;
+                this.baseRateData = baseRateData;
                 this._initLineChart();
             },
             _initLineChart: function () {
@@ -48,13 +49,19 @@
                 this.set('width', 500 - this.margin.left - this.margin.right);
                 this.set('height', 250- this.margin.top - this.margin.bottom);
 
+                if(this.legendNames != undefined && this.legendColors != undefined) {
+                    var names = this.legendNames.split(",");
+                    var colors = this.legendColors.split(",");
+                    this.options = [[names[0], colors[0]], [names[1], colors[1]]];
+                }
+
                 this.set("x0",d3.scaleBand()
                         .range([0, this.width])
                         .padding(0.1));
                 this.set("x1",d3.scaleBand()
                         .padding(0.05));
                 this.set("z",d3.scaleOrdinal()
-                        .range(["#CC6633", "#CC6633", "#CC6633"]));
+                        .range([this.options[0][1], this.options[0][1], this.options[0][1]]));
                 this.set("y",d3.scaleLinear().range([this.height, 50]));
 
                 this.set("svg",d3.select(this.$.chart).append("svg")
@@ -68,7 +75,6 @@
 
                 this._drawBarChart();
                 this._drawBaseRate();
-
             },
             _drawBaseRate: function () {
                 // set the ranges
@@ -77,7 +83,7 @@
                 var yBase = d3.scaleLinear().range([this.height, 50]);
                 var self = this;
 
-                d3.csv("/src/utilities/mini-charts2.csv", function(error, data) {
+                d3.csv(this.baseRateData, function(error, data) {
                     if (error) throw error;
 
                     xBase.domain(d3.extent(data, function(d) { return d.date; }));
@@ -90,9 +96,9 @@
                             .attr("d", self._getBaseRate(xBase,yBase,'baseRate'));
 
 
-                    console.log(data);
+
                     var legend = self.svg.selectAll(".legend")
-                            .data([['Wirtschaft','#CC6633'],['Libor-Zins','#5AA7FF']])
+                            .data(self.options)
                             .enter().append("g")
                             .attr("class", "legend")
                             .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
@@ -110,15 +116,29 @@
                             .style("text-anchor", "end")
                             .style("fill", "white")
                             .text(function(d) { return d[0]; });
+
+
                 });
             },
             _drawBarChart: function () {
                 var self = this;
 
-                d3.csv("/src/utilities/mini-charts.csv", function(d, i, columns) {
+                d3.csv(this.barData, function(d, i, columns) {
                     for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
                     return d;
                 }, function(error, data) {
+
+//                    var t = d3.transition()
+//                            .duration(10000)
+//                            .ease(d3.easeLinear)
+//                        //トランジションイベント
+//                            .on("start", function(d){ console.log("transiton start") }) //トランジション開始時
+//                            .on("end", function(d){ console.log("transiton end") }); //トランジション終了時
+
+                    var t = d3.transition()
+                            .duration(1000)
+                            .ease(d3.easeLinear)
+
 
                     var keys = data.columns.slice(1);
 
@@ -140,15 +160,32 @@
                             .enter();
 
 
-
                     bar_enter.append("rect")
                             .attr("class", "bar-single")
                             .attr("x", function(d) { return self.x1(d.key); })
-                            .attr("y", function(d) { return self.y(d.value); })
+                            .attr("y", function(d) { return self.y(d.value) })
                             .attr("width", self.x1.bandwidth())
-                            .attr("height", function(d) { return self.height - self.y(d.value); })
+                            .attr("height", function(d) {
+                                console.log(self.height);
+                                return self.height - self.y(d.value);
+                            })
                             .attr("fill", function(d) { return self.z(d.key); })
-                    ;
+                            .on("click", function (d) {console.log("huhuh")})
+                            .transition()
+                            .duration(1000)
+                            .delay(0)
+                            .attr("height", function(d) {
+                                console.log(self.height);
+                                 return 0;
+                            })
+
+                          //  .attr("transform", function(d) { return "translate(" + [self.x1(d.key), self.height] + ")" })
+//                            .transition(t)
+//                            .attr("height", function(d) { return self.height - self.y(d.value) })
+//                            .attr("transform", function(d) { return "translate(" + [self.x1(d.key), self.y(d.value)] + ")" });
+
+                    //return "translate(" + [self.x1(d.key), self.y(d.value)];
+
 
                     bar_enter.append("text")
                             .attr("class","label")
@@ -156,7 +193,9 @@
                             .attr("x", (function(d) { return (self.x1(d.key) + self.x1.bandwidth() / 2)-9 ; }  ))
                             .attr("y", function(d) { return self.y(d.value) + 1; })
                             .attr("dy", ".75em")
-                            .text(function(d) { return d.value; });
+                            .text(function(d) { return d.value; })
+
+
 
 
                     // Add the X Axis
@@ -166,15 +205,6 @@
                             .attr("class", "x-axis")
                             .call(xAxis);
 
-                    self.svg.append("text")
-                            .attr("fill", "white")
-                            .attr("x", 905)
-                            .attr("y", 450)
-                            .attr("dy", 25)
-                            .attr("dx", "-1.5em")
-                            .style("text-anchor", "end")
-                            .style("font-family", "helvetica")
-                            .text("Laufzeit (Monate)");
 
 
                     // Scale the range of the data
@@ -199,6 +229,8 @@
                                     .tickSize(-self.width)
                                     .tickFormat("")
                     );
+
+
                 });
             },
             initChartOne: function (token) {

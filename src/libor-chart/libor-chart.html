@@ -1,0 +1,75 @@
+<link rel="import" href="../utilities/imports.html">
+<link rel="import" href="../mini-chart/mini-chart.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/d3-tip/index.js">
+<link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+
+<dom-module id="libor-chart">
+    <link rel="import" type="css" href="libor-chart-styles.css">
+
+    <template>
+        <div id="test" class="content-container">
+            <div class="token-container">
+                <div class="token-text">Libor</div>
+            </div>
+            <div style="width:300px">
+                <mini-chart id="chart" legend-names="Libor-Zins,Wirtschaft" legend-colors="#23A392,#FAC100" bar-data="/src/libor-chart/mini-charts.csv" base-rate-data="/src/libor-chart/base-rate.csv"></mini-chart>
+            </div>
+            <div class="text-container">
+                <div class="detailName">Zinssatz:
+                    <span class="detailText">Anpassung alle 3,6,12 Monate</span>
+                </div>
+                <div class="detailName">Dauer:
+                    <span class="detailText">2-6 Jahre</span>
+                </div>
+                <div class="detailName">Vorteil:
+                    <span class="detailText">wechsel zu Festhypothek Attraktive Zinssätze</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'libor-chart',
+            behaviors: [
+                Polymer.IronA11yKeysBehavior
+            ],
+            properties: {
+                keyEventTarget: {
+                    type: Object,
+                    value: function() {
+                        return document.body;
+                    }
+                },
+                margin: Object,
+                width: Object,
+                x1: Object,
+                x0: Object,
+                y: Object,
+                z: Object,
+                svg: Object,
+                details: Object,
+            },
+            ready: function () {
+            },
+            keyBindings: {
+                '* pageup pagedown left right down up home end space enter @ ~ " $ ? ! \\ + : # backspace': '_updatePressed',
+                'q': '_changeScenarioA',
+                'a': '_changeScenarioB',
+                'shift+tab shift+space': '_updatePressed'
+            },
+            _changeScenarioA: function () {
+                console.log("ok");
+                var chart = this.$.chart;
+                chart.changeScenario("/src/libor-chart/mini-charts-negative.csv","/src/libor-chart/base-rate-negative.csv");
+            },
+            _changeScenarioB: function () {
+                console.log("ok");
+                var chart = this.$.chart;
+                chart.changeScenario("/src/libor-chart/mini-charts.csv","/src/libor-chart/base-rate.csv");
+            }
+        });
+    </script>
+</dom-module>

@@ -4,7 +4,11 @@
 It's a web application which is optimized for a beamer to explain mortgages.
 (based on Polymer-starter-kit)
 
+Prototype 1
 ![alt tag](hypo.gif)
+
+Prototype 2
+![alt tag](prototype2.png)
 
 Technologies:
  - Polymer 1.4

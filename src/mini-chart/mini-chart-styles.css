@@ -1,0 +1,92 @@
+.content-container > ::content text {
+  font-family: Lato;
+  font-size: 13px; }
+
+.content-container > ::content .grid line {
+  stroke: white;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+  stroke-width: 1px; }
+
+.content-container > ::content .grid path {
+  stroke-width: 0; }
+
+.content-container > ::content path,
+.content-container > ::content line {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+  stroke-width: 5px; }
+
+.content-container > ::content .baseLine {
+  stroke-width: 6px;
+  stroke: #FAC100;
+  shape-rendering: geometricPrecision; }
+
+.content-container > ::content .line-chart svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto; }
+
+.content-container > ::content .x-axis text {
+  fill: white;
+  font-family: helvetica; }
+
+.content-container > ::content .y-axis text {
+  fill: white;
+  font-family: helvetica; }
+
+.content-container > ::content .domain {
+  stroke: #5AA7FF; }
+
+.content-container > ::content .bar:hover {
+  fill: #13544b; }
+
+.content-container > ::content .bar {
+  fill: #23A392; }
+
+.content-container > ::content .tick line {
+  stroke: transparent !important; }
+
+.content-container > ::content .domain {
+  stroke: transparent !important; }
+
+.content-container > ::content text {
+  font-size: 20px;
+  font-family: avenir; }
+
+.content-container {
+  position: relative;
+  width: 100px;
+  opacity: 0.7; }
+
+#chart {
+  position: absolute; }
+
+.content-container > ::content .contry .label {
+  font-size: 16px;
+  z-index: 100; }
+
+.cyanBackgroundStop1 {
+  stop-color: red; }
+
+.cyanBackgroundStop2 {
+  stop-color: red; }
+
+.cyanForegroundStop1 {
+  stop-color: white; }
+
+.cyanForegroundStop2 {
+  stop-color: white; }
+
+.content-container > ::content .cyanBackgroundStop1 {
+  stop-color: red; }
+
+.content-container > ::content .cyanBackgroundStop2 {
+  stop-color: red; }
+
+.content-container > ::content .cyanForegroundStop1 {
+  stop-color: white; }
+
+.content-container > ::content .cyanForegroundStop2 {
+  stop-color: white; }

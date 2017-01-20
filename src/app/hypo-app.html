@@ -3,7 +3,10 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../line-chart/line-chart.html">
-<link rel="import" href="../mini-charts/mini-charts.html">
+<link rel="import" href="../libor-chart/libor-chart.html">
+<link rel="import" href="../fest-chart/fest-chart.html">
+<link rel="import" href="../mini-chart/mini-chart.html">
+<link rel="import" href="../variable-chart/variable-chart.html">
 <link rel="import" href="../token-area/token-area.html">
 <link rel="import" href="../utilities/imports.html">
 <link rel="import" href="../amortisation/amor-app.html">
@@ -28,8 +31,9 @@
             <token-area></token-area>
         </template>
         <template is="dom-if" if="[[_equal(route.path, 'mini')]]">
-            <mini-charts></mini-charts>
-
+            <libor-chart></libor-chart>
+            <fest-chart></fest-chart>
+            <variable-chart></variable-chart>
         </template>
     </div>
   </template>

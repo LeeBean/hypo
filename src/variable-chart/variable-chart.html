@@ -1,0 +1,77 @@
+<link rel="import" href="../utilities/imports.html">
+<link rel="import" href="../mini-chart/mini-chart.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/d3-tip/index.js">
+<link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<dom-module id="variable-chart">
+    <link rel="import" type="css" href="variable-chart-styles.css">
+
+    <template>
+        <div id="test" class="content-container">
+            <div class="token-container">
+                <div class="token-text">Variable</div>
+            </div>
+            <div style="width:300px">
+                <mini-chart id="chart" legend-names="Variabler-Zins,Wirtschaft" legend-colors="#23A392,#FAC100" bar-data="/src/variable-chart/mini-charts.csv" base-rate-data="/src/variable-chart/base-rate.csv"></mini-chart>
+            </div>
+            <div class="text-container">
+                <div class="detailName">Zinssatz:
+                    <span class="detailText">Abhängig von der Bank</span>
+                </div>
+
+                <div class="detailName">Dauer:
+                    <span class="detailText">Keine feste Dauer</span>
+                </div>
+
+                <div class="detailName">Vorteil:
+                    <span class="detailText">Jederzeit kündbar, Flexibilität</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'variable-chart',
+            behaviors: [
+                Polymer.IronA11yKeysBehavior
+            ],
+            properties: {
+                keyEventTarget: {
+                    type: Object,
+                    value: function() {
+                        return document.body;
+                    }
+                },
+                margin: Object,
+                width: Object,
+                x1: Object,
+                x0: Object,
+                y: Object,
+                z: Object,
+                svg: Object,
+                details: Object,
+            },
+            ready: function () {
+            },
+            keyBindings: {
+                '* pageup pagedown left right down up home end space enter @ ~ " $ ? ! \\ + : # backspace': '_updatePressed',
+                'e': '_changeScenarioA',
+                'd': '_changeScenarioB',
+                'shift+tab shift+space': '_updatePressed'
+            },
+            _changeScenarioA: function () {
+                console.log("ok");
+                var chart = this.$.chart;
+                chart.changeScenario("/src/variable-chart/mini-charts.csv","/src/variable-chart/base-rate-negative.csv");
+            },
+            _changeScenarioB: function () {
+                console.log("ok");
+                var chart = this.$.chart;
+                chart.changeScenario("/src/variable-chart/mini-charts.csv","/src/variable-chart/base-rate.csv");
+            }
+        });
+
+    </script>
+</dom-module>

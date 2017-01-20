@@ -1,0 +1,394 @@
+<link rel="import" href="../utilities/imports.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/d3-tip/index.js">
+
+<dom-module id="mini-chart">
+    <link rel="import" type="css" href="../mini-chart/mini-chart-styles.css">
+
+    <template>
+        <div id="test" class="content-container">
+            <div id="chart"></div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'mini-chart',
+            properties: {
+                margin: Object,
+                width: Object,
+                height: Object,
+                chartWidth: Object,
+                chartHeight: Object,
+                axisLayer: Object,
+                chartLayer: Object,
+                xScale: Object,
+                xInScale: Object,
+                yScale: Object,
+                svg: Object,
+                options: Array,
+                legendNames: String,
+                legendColors:String,
+                barData: String,
+                baseRateData: String,
+                parseTime: String,
+            },
+            created: function(){
+                this.legend = [];
+                this.options = [];
+            },
+            ready: function () {
+
+                this.set('margin', {top: 20, right: 20, bottom: 50, left: 0});
+                this.set('width', 700);
+                this.set('height', 250);
+
+
+                this._initLineChart();
+            },
+            changeScenario: function (barData,baseRateData) {
+                this.$.chart.innerHTML = "";
+                this.barData = barData;
+                this.baseRateData = baseRateData;
+                this._initLineChart();
+            },
+            _initLineChart: function () {
+
+
+                this.set("svg",d3.select(this.$.chart).append("svg"));
+                this.set("axisLayer",this.svg.append("g").classed("axisLayer", true));
+                this.set("chartLayer",this.svg.append("g").classed("chartLayer", true));
+
+
+                this.set("xScale",d3.scaleBand());
+                this.set("xInScale",d3.scaleBand());
+                this.set("yScale",d3.scaleLinear().range([1, 1]).domain([1, 1]));
+
+
+                //this.yScale.domain([0, this.chartHeight]).range([this.chartHeight, 50]);
+
+                if(this.legendNames != undefined && this.legendColors != undefined) {
+                    var names = this.legendNames.split(",");
+                    var colors = this.legendColors.split(",");
+                    this.options = [[names[0], colors[0]], [names[1], colors[1]]];
+                }
+
+                this._initShadows();
+
+
+
+                var self = this;
+
+                var cast =  function (d) {
+                    Object.keys(d).forEach(function(key){
+                        if (!isNaN(+d[key])) d[key] = +d[key]
+                    })
+                    return d
+                };
+
+
+                var main =  function (data) {
+
+                    console.log("ok");
+
+
+                    var nested = d3.nest()
+                            .rollup(function(d){ delete d[0].contry; return d[0] })
+                            .key(function(d){ return d.contry })
+                            .entries(data);
+
+                    nested.forEach(function(d){
+                        d.age = Object.keys(d.value).map(function(key){
+                            return {key:key, value:d.value[key]}
+                        })
+                    });
+
+                    self._setSize(nested,self);
+
+                    self._drawChart(nested,self);
+
+                    self._drawAxis(nested,self);
+
+                    self._drawBaseRate();
+                };
+
+                d3.csv(this.barData, cast,  main);
+
+
+//                this._drawBarChart();
+//                this._drawBaseRate();
+            },
+            _initShadows: function () {
+                // filter stuff
+                /* For the shadow filter... */
+                // everything that will be referenced
+                // should be defined inside of a <defs> element ;)
+                var defs = this.svg.append('defs');
+
+                // append filter element
+                var filter = defs.append( 'filter' )
+                        .attr( 'id', 'dropshadow' ) /// !!! important - define id to reference it later
+
+                // append gaussian blur to filter
+                filter.append( 'feGaussianBlur' )
+                        .attr( 'in', 'SourceAlpha' )
+                        .attr( 'stdDeviation', 3 ) // !!! important parameter - blur
+                        .attr( 'result', 'blur' );
+
+                // append offset filter to result of gaussion blur filter
+                filter.append( 'feOffset' )
+                        .attr( 'in', 'blur' )
+                        .attr( 'dx', 2 ) // !!! important parameter - x-offset
+                        .attr( 'dy', 3 ) // !!! important parameter - y-offset
+                        .attr( 'result', 'offsetBlur' );
+
+                // merge result with original image
+                var feMerge = filter.append( 'feMerge' );
+
+                // first layer result of blur and offset
+                feMerge.append( 'feMergeNode' )
+                        .attr( 'in", "offsetBlur' )
+
+                // original image on top
+                feMerge.append( 'feMergeNode' )
+                        .attr( 'in', 'SourceGraphic' );
+
+                // end filter stuff
+
+
+
+                var gradientForegroundPurple = defs.append( 'linearGradient' )
+                        .attr( 'id', 'gradientForegroundPurple' )
+                        .attr( 'x1', '0' )
+                        .attr( 'x2', '0' )
+                        .attr( 'y1', '0' )
+                        .attr( 'y2', '1' );
+
+                gradientForegroundPurple.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", "red")
+                        .attr("stop-opacity", 1);
+
+                gradientForegroundPurple.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", "white")
+                        .attr("stop-opacity", 1);
+
+            },
+            _setSize: function (nested, self) {
+                var width = 700;
+                var height = 300;
+
+                this.set("margin", {top:0, left:0, bottom:40, right:0 });
+                this.set("chartWidth" , width - (this.margin.left+this.margin.right));
+                this.set("chartHeight", height - (this.margin.top+this.margin.bottom));
+
+                this.svg.attr("width", width).attr("height", height);
+
+                this.axisLayer.attr("width", width).attr("height", height);
+
+                this.chartLayer
+                        .attr("width", this.chartWidth)
+                        .attr("height", this.chartHeight)
+                        .attr("transform", "translate("+[this.margin.left, this.margin.top]+")");
+
+                this.xScale.domain(nested.map(function(d) { return d.key }))
+                        .range([0, self.chartWidth]).paddingInner(0.1);
+
+                var ageNames = Object.keys(nested[0].value);
+
+                this.xInScale.domain(ageNames).range([0, this.xScale.bandwidth()]);
+
+                var yMax = d3.max(nested.map(function(d){
+                    var values = Object.keys(d.value).map(function(key){
+                        return d.value[key]
+                    });
+                    return d3.max(values)
+                }));
+
+                this.yScale.domain([0, 7]).range([this.chartHeight, 50]);
+            },
+            _drawChart: function (nested,self) {
+                var t = d3.transition()
+                        .duration(1000)
+                        .ease(d3.easeLinear);
+
+
+                var contry = this.chartLayer.selectAll(".contry")
+                        .data(nested);
+
+                var newCountry = contry.enter().append("g").attr("class", "contry");
+                contry.merge(newCountry)
+                        .attr("transform", function(d) { return "translate(" + [self.xScale(d.key), 0] + ")"; });
+
+                var bar = newCountry.selectAll(".bar")
+                        .data(function(d){ return d.age });
+
+                var newBar = bar.enter().append("rect").attr("class", "bar");
+
+                bar.merge(newBar)
+                        .attr("width", self.xInScale.bandwidth()-10)
+                        .attr("height", 0)
+                        .attr("fill", function(d) { return self.options[0][1]; })
+                        .attr("transform", function(d) { return "translate(" + [self.xInScale(d.key), self.chartHeight] + ")" });
+
+                bar.merge(newBar).transition(t)
+                        .attr("height", function(d) { return self.chartHeight - self.yScale(d.value); })
+                        .attr("transform", function(d) { return "translate(" + [self.xInScale(d.key), self.yScale(d.value)] + ")" });
+
+
+                // add bar label
+                bar.enter().append("text")
+                        .attr("class","label")
+                        .attr("fill", "white")
+                        .attr("transform", function(d) {
+                            var x = 15;
+                            if(String(d.value).length > 1) {
+                                x=23;
+                            };
+                            return "translate(" + [(self.xInScale(d.key) + self.xInScale.bandwidth() / 2)-x, self.chartHeight+10] + ")"
+                        })
+                        .attr("dy", ".75em")
+                        .attr("height", 0)
+                        .text(function(d) { return d.value + "%"; })
+                        .transition(t)
+                        .attr("transform", function(d) {
+                            var x = 15;
+                            if(String(d.value).length > 1) {
+                                x=23;
+                            };
+                            return "translate(" + [(self.xInScale(d.key) + self.xInScale.bandwidth() / 2)-x, self.yScale(d.value) +10] + ")";
+                        });
+
+            },
+            _drawLabels: function (nested,self) {
+
+            },
+            _drawAxis: function (nested,self) {
+                var yAxis = d3.axisLeft(this.yScale)
+                        .tickSizeInner(-this.chartWidth)
+
+                this.axisLayer.append("g")
+                        .attr("transform", "translate("+[this.margin.left, this.margin.top]+")")
+                        .attr("class", "axis y")
+                        .call(yAxis);
+
+                var format = function(d) {
+                    if(d == 1) {
+                        return "Jan"
+                    }
+                    if(d == 3) {
+                        return "Feb"
+                    }
+                    if(d == 4) {
+                        return "Mar"
+                    }
+                    return weekdays[d % 7] + "day";
+                }
+
+                var xAxis = d3.axisBottom(this.xInScale)
+                xAxis.tickFormat(format);
+
+
+                this.axisLayer.append("g")
+                        .attr("class", "x-axis")
+                        .attr("transform", "translate("+ [this.margin.left, this.chartHeight]+")")
+                        .call(xAxis);
+
+            },
+            _drawBaseRate: function () {
+                // set the ranges
+                var xBase = d3.scaleLinear()
+                        .range([0, this.chartWidth]);
+                var yBase = d3.scaleLinear();
+
+                yBase.domain([0, 7]).range([this.chartHeight, 50]);
+
+                var self = this;
+
+                d3.csv(this.baseRateData, function(error, data) {
+                    if (error) throw error;
+
+                    xBase.domain(d3.extent(data, function(d) { return d.date; }));
+
+
+                    self.svg.append("path")
+                            .data([data])
+                            .attr("class", "baseLine")
+                            .attr( 'filter', 'url(#dropshadow)' ) // !!! important - set id of predefined filter
+                            .attr("d", self._getBaseRate(xBase,yBase,'baseRate'));
+
+                });
+
+
+                console.log(self.options[0]);
+                this.svg.append("g")
+                        .attr("class", "legend")
+                        .attr("transform", "translate(0," + 10 + ")");
+                this._drawLegend([self.options[0]],self.width - 18,9);
+                this._drawLegend([self.options[0]],10,9);
+
+                var legend = this.svg.selectAll(".legend")
+
+
+                legend.append("rect")
+                        .attr("x", self.width - 25)
+                        .attr("width", 22)
+                        .attr("height", 22)
+                        .style("fill", self.options[0][1]);
+
+                legend.append("text")
+                        .attr("x", self.width - 37)
+                        .attr("y", 10)
+                        .attr("dy", ".35em")
+                        .style("text-anchor", "end")
+                        .style("fill", "white")
+                        .attr("font-family","sans-serif")
+                        .text(self.options[0][0]);
+
+                legend.append("rect")
+                        .attr("x", 0)
+                        .attr("width", 18)
+                        .attr("height", 18)
+                        .style("fill", self.options[1][1]);
+
+                legend.append("text")
+                        .attr("x", 115)
+                        .attr("y", 10)
+                        .attr("dy", ".35em")
+                        .style("text-anchor", "end")
+                        .style("fill", "white")
+                        .attr("font-family","sans-serif")
+                        .text(self.options[1][0]);
+            },
+            _drawLegend: function (options,x,y) {
+
+            },
+            initChartOne: function (token) {
+                var url;
+                if(token === 'token1') {
+                    this.set('showToken1', this.showToken1 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                } else if (token === 'token2') {
+                    this.set('showToken2', this.showToken2 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                } else if (token === 'token3') {
+                    this.set('showToken3', this.showToken3 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                }else {
+                    this.set('showToken1', this.showToken1 != true);
+                    url = "/src/utilities/dataLineChart.csv";
+                };
+
+                this.$.chart.innerHTML = "";
+                this._initLineChart(url);
+            },
+            _getBaseRate: function (x,y,token) {
+                // define the 1st line
+                return d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d[token]); });
+            }
+        });
+    </script>
+</dom-module>
